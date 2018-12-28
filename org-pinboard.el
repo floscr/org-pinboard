@@ -38,7 +38,6 @@
 (require 's)
 (require 'helm-org-rifle)
 
-;;;###autoload
 (defun helm-org-rifle-pinboard-open-link (candidate)
   "Open URL from Candidate"
   ;; This needs to be an interactive command because it's bound in `helm-org-rifle-map'.
@@ -52,7 +51,6 @@
   "The bookmarks file"
   :type 'string)
 
-;;;###autoload
 (defun org-pinboard-rifle-get-source (buffer)
   "Return Helm source for BUFFER."
   (let ((source (helm-build-sync-source (buffer-name buffer)
@@ -74,20 +72,17 @@
     (helm-attrset 'buffer buffer source)
     source))
 
-;;;###autoload
 (defun helm-pinboard-rifle-file ()
   "Override the default source file getter for 'helm-org-rifle-get-source-for-buffer"
   (cl-letf (((symbol-function 'helm-org-rifle-get-source-for-buffer) #'org-pinboard-rifle-get-source))
     (helm-org-rifle-files org-pinboard-file)))
 
-;;;###autoload
 (helm-org-rifle-define-command
   "pinboard" ()
   "Rifle through the current buffer, sorted by latest timestamp."
   :transformer 'helm-org-rifle-transformer-sort-by-latest-timestamp
   :sources (helm-pinboard-rifle-file))
 
-;;;###autoload
 (defun lol ()
   (interactive)
   (message "lol"))
