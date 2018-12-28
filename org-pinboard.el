@@ -38,14 +38,13 @@
 (require 's)
 (require 'helm-org-rifle)
 
-(defun helm-org-rifle-pinboard-open-link (candidate)
-  "Open URL from Candidate"
-  ;; This needs to be an interactive command because it's bound in `helm-org-rifle-map'.
-  (interactive)
+(defun helm-org-rifle-pinboard-show-entry-in-real-buffer (candidate)
+  "Show CANDIDATE in its real buffer."
   (-let (((buffer . pos) candidate))
-    (with-current-buffer buffer
-      (goto-char pos)
-      (message (org-entry-get (point) "URL")))))
+    (switch-to-buffer buffer)
+    (goto-char pos)
+    (message (org-entry-get (point) "URL")))
+  (org-show-entry))
 
 (defcustom org-pinboard-file "~/Dropbox/org/Bookmarks/bookmarks.org"
   "The bookmarks file"
@@ -54,21 +53,15 @@
 (defun org-pinboard-rifle-get-source (buffer)
   "Return Helm source for BUFFER."
   (let ((source (helm-build-sync-source (buffer-name buffer)
-                  :after-init-hook helm-org-rifle-after-init-hook
                   :candidates (lambda ()
                                 (when (s-present? helm-pattern)
                                   (helm-org-rifle--get-candidates-in-buffer (helm-attr 'buffer) helm-pattern)))
-                  :candidate-transformer helm-org-rifle-transformer
                   :match 'identity
                   :multiline t
                   :volatile t
                   :action (helm-make-actions
-                            "Open Link" 'helm-org-rifle-pinboard-open-link
-                            "Show entry" 'helm-org-rifle--show-candidates
-                            "Show entry in indirect buffer" 'helm-org-rifle-show-entry-in-indirect-buffer
-                            "Show entry in real buffer" 'helm-org-rifle-show-entry-in-real-buffer
-                            "Refile" 'helm-org-rifle--refile)
-                  :keymap helm-org-rifle-map)))
+                           "Open Link" 'helm-org-rifle-pinboard-show-entry-in-real-buffer
+                           "Show entry" 'helm-org-rifle--show-candidates))))
     (helm-attrset 'buffer buffer source)
     source))
 
@@ -81,7 +74,8 @@
 (defun helm-org-pinboard ()
   "Create helm for pinboard rifle."
   (interactive)
-  (helm :sources (helm-pinboard-rifle-file)))
+  (helm
+    :sources (list (helm-pinboard-rifle-file))))
 
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
