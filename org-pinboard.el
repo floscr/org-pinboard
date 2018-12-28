@@ -77,17 +77,11 @@
   (cl-letf (((symbol-function 'helm-org-rifle-get-source-for-buffer) #'org-pinboard-rifle-get-source))
     (helm-org-rifle-files org-pinboard-file)))
 
-;;;###autoload (autoload 'helm-org-rifle-pinboard "helm-org-rifle" nil t)
-(helm-org-rifle-define-command
-  "pinboard" ()
-  "Rifle through the current buffer, sorted by latest timestamp."
-  :transformer 'helm-org-rifle-transformer-sort-by-latest-timestamp
-  :sources (helm-pinboard-rifle-file))
-
 ;;;###autoload
-(defun lol ()
+(defun helm-org-pinboard ()
+  "Create helm for pinboard rifle."
   (interactive)
-  (message "lol"))
+  (helm :sources (helm-pinboard-rifle-file)))
 
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
