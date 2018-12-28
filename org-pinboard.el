@@ -50,9 +50,10 @@
   "The bookmarks file"
   :type 'string)
 
-(defun org-pinboard-rifle-get-source (buffer)
+(defun org-pinboard-rifle-get-source ()
   "Return Helm source for BUFFER."
-  (let ((source (helm-build-sync-source (buffer-name buffer)
+  (let* ((buffer (find-file-noselect org-pinboard-file))
+         (source (helm-build-sync-source (buffer-name buffer)
                   :candidates (lambda ()
                                 (when (s-present? helm-pattern)
                                   (helm-org-rifle--get-candidates-in-buffer (helm-attr 'buffer) helm-pattern)))
@@ -65,17 +66,12 @@
     (helm-attrset 'buffer buffer source)
     source))
 
-(defun helm-pinboard-rifle-file ()
-  "Override the default source file getter for 'helm-org-rifle-get-source-for-buffer"
-  (cl-letf (((symbol-function 'helm-org-rifle-get-source-for-buffer) #'org-pinboard-rifle-get-source))
-    (helm-org-rifle-files org-pinboard-file)))
-
 ;;;###autoload
 (defun helm-org-pinboard ()
   "Create helm for pinboard rifle."
   (interactive)
   (helm
-    :sources (list (helm-pinboard-rifle-file))))
+    :sources (org-pinboard-rifle-get-source)))
 
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
