@@ -38,17 +38,16 @@
 (require 's)
 (require 'helm-org-rifle)
 
-(defun helm-org-rifle-pinboard-show-entry-in-real-buffer (candidate)
-  "Show CANDIDATE in its real buffer."
-  (-let (((buffer . pos) candidate))
-    (switch-to-buffer buffer)
-    (goto-char pos)
-    (message (org-entry-get (point) "URL")))
-  (org-show-entry))
-
 (defcustom org-pinboard-file "~/Dropbox/org/Bookmarks/bookmarks.org"
   "The bookmarks file"
   :type 'string)
+
+(defun helm-org-pinboard-open-url (candidate)
+  "Open CANDIDATE in the browser."
+  (-let (((buffer . pos) candidate))
+    (switch-to-buffer buffer)
+    (goto-char pos)
+    (browse-url (org-entry-get (point) "URL"))))
 
 (defun org-pinboard-rifle-get-source ()
   "Return Helm source for BUFFER."
@@ -61,7 +60,7 @@
                   :multiline t
                   :volatile t
                   :action (helm-make-actions
-                           "Open Link" 'helm-org-rifle-pinboard-show-entry-in-real-buffer
+                           "Open Link" 'helm-org-pinboard-open-url
                            "Show entry" 'helm-org-rifle--show-candidates))))
     (helm-attrset 'buffer buffer source)
     source))
@@ -70,8 +69,7 @@
 (defun helm-org-pinboard ()
   "Create helm for pinboard rifle."
   (interactive)
-  (helm
-    :sources (org-pinboard-rifle-get-source)))
+  (helm :sources (org-pinboard-rifle-get-source)))
 
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
