@@ -77,6 +77,7 @@
   (cl-letf (((symbol-function 'helm-org-rifle-get-source-for-buffer) #'org-pinboard-rifle-get-source))
     (helm-org-rifle-files org-pinboard-file)))
 
+;;;###autoload (autoload 'helm-org-rifle-pinboard "helm-org-rifle" nil t)
 (helm-org-rifle-define-command
   "pinboard" ()
   "Rifle through the current buffer, sorted by latest timestamp."
