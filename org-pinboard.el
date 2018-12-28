@@ -83,6 +83,7 @@
   :transformer 'helm-org-rifle-transformer-sort-by-latest-timestamp
   :sources (helm-pinboard-rifle-file))
 
+;;;###autoload
 (defun lol ()
   (interactive)
   (message "lol"))
