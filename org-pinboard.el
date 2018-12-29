@@ -38,8 +38,8 @@
 (require 's)
 (require 'helm-org-rifle)
 
-(defcustom org-pinboard-file "~/Dropbox/org/Bookmarks/bookmarks.org"
-  "The bookmarks file"
+(defcustom org-pinboard-file (concat org-directory "/Bookmarks/bookmarks.org")
+  "The bookmarks file."
   :type 'string)
 
 (defun helm-org-pinboard-open-url (candidate)
