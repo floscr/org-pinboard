@@ -105,5 +105,12 @@
 ;;;###autoload
 (add-to-list 'doom-auto-minor-mode-alist `(,(concat org-pinboard-dir ".*\\.org\\'") . pinboard-mode))
 
+;;;###autoload
+(defun +org-pinboard/dwim-at-point ()
+  (interactive)
+  (if-let ((url (org-entry-get (point) "URL")))
+      (browse-url url)
+    (+org/dwim-at-point)))
+
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
