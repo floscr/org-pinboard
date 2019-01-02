@@ -42,6 +42,10 @@
   "The bookmarks file."
   :type 'string)
 
+(defcustom org-pinboard-archive-file (concat org-directory "/Bookmarks/.archive/pinboard.org")
+  "The archive file."
+  :type 'string)
+
 (defun helm-org-pinboard-open-url (candidate)
   "Open CANDIDATE in the browser."
   (-let (((buffer . pos) candidate))
@@ -49,9 +53,9 @@
     (goto-char pos)
     (browse-url (org-entry-get (point) "URL"))))
 
-(defun org-pinboard-rifle-get-source ()
-  "Return Helm source for BUFFER."
-  (let* ((buffer (find-file-noselect org-pinboard-file))
+(defun org-pinboard-rifle-get-source (file)
+  "Return Helm source for FILE."
+  (let* ((buffer (find-file-noselect file))
          (source (helm-build-sync-source (buffer-name buffer)
                   :candidates (lambda ()
                                 (when (s-present? helm-pattern)
@@ -67,9 +71,21 @@
 
 ;;;###autoload
 (defun helm-org-pinboard ()
-  "Create helm for pinboard rifle."
+  "Helm pinboard rifle."
   (interactive)
-  (helm :sources (org-pinboard-rifle-get-source)))
+  (helm :sources (org-pinboard-rifle-get-source org-pinboard-file)))
+
+;;;###autoload
+(defun helm-org-pinboard-archive ()
+  "Helm pinboard archive rifle."
+  (interactive)
+  (helm :sources (org-pinboard-rifle-get-source org-pinboard-archive-file)))
+
+;;;###autoload
+(defun helm-org-pinboard-all ()
+  "Helm pinboard all rifle."
+  (interactive)
+  (helm :sources (-map #'org-pinboard-rifle-get-source (list org-pinboard-file org-pinboard-archive-file))))
 
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
