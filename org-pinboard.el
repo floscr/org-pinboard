@@ -38,14 +38,17 @@
 (require 's)
 (require 'helm-org-rifle)
 
+;;;###autoload
 (defcustom org-pinboard-dir org-directory
   "The pinboard directory."
   :type 'string)
 
+;;;###autoload
 (defcustom org-pinboard-file (concat org-pinboard-dir "/Bookmarks/bookmarks.org")
   "The bookmarks file."
   :type 'string)
 
+;;;###autoload
 (defcustom org-pinboard-archive-file (concat org-pinboard-dir "/Bookmarks/.archive/pinboard.org")
   "The archive file."
   :type 'string)
