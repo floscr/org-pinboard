@@ -50,12 +50,19 @@
   "The archive file."
   :type 'string)
 
+;;;###autoload
+(defun org-pinboard-open-url ()
+  "Open URL prop in browser."
+  (interactive)
+  "Open the URL property of the element under the cursor."
+  (browse-url (org-entry-get (point) "URL")))
+
 (defun helm-org-pinboard-open-url (candidate)
   "Open CANDIDATE in the browser."
   (-let (((buffer . pos) candidate))
     (switch-to-buffer buffer)
     (goto-char pos)
-    (browse-url (org-entry-get (point) "URL"))))
+    (pinboard-open-url)))
 
 (defun org-pinboard-rifle-get-source (file)
   "Return Helm source for FILE."
