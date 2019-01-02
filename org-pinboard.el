@@ -38,11 +38,15 @@
 (require 's)
 (require 'helm-org-rifle)
 
-(defcustom org-pinboard-file (concat org-directory "/Bookmarks/bookmarks.org")
+(defcustom org-pinboard-dir org-directory
+  "The pinboard directory."
+  :type 'string)
+
+(defcustom org-pinboard-file (concat org-pinboard-dir "/Bookmarks/bookmarks.org")
   "The bookmarks file."
   :type 'string)
 
-(defcustom org-pinboard-archive-file (concat org-directory "/Bookmarks/.archive/pinboard.org")
+(defcustom org-pinboard-archive-file (concat org-pinboard-dir "/Bookmarks/.archive/pinboard.org")
   "The archive file."
   :type 'string)
 
@@ -86,6 +90,13 @@
   "Helm pinboard all rifle."
   (interactive)
   (helm :sources (-map #'org-pinboard-rifle-get-source (list org-pinboard-file org-pinboard-archive-file))))
+
+;;;###autoload
+(define-minor-mode pinboard-mode
+  "Custom mode for pinboard files to add hooks and bindings.")
+
+;;;###autoload
+(add-to-list 'doom-auto-minor-mode-alist `(,(concat org-pinboard-dir ".*\\.org\\'") . pinboard-mode))
 
 (provide 'org-pinboard)
 ;;; org-pinboard.el ends here
