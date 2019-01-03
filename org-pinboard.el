@@ -62,7 +62,7 @@
   (-let (((buffer . pos) candidate))
     (switch-to-buffer buffer)
     (goto-char pos)
-    (pinboard-open-url)))
+    (org-pinboard-open-url)))
 
 (defun org-pinboard-rifle-get-source (file)
   "Return Helm source for FILE."
