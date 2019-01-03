@@ -102,9 +102,10 @@
 (define-minor-mode pinboard-mode
   "Custom mode for pinboard files to add hooks and bindings.")
 
-;;;###autoload
-(add-hook 'org-mode-hook (lambda ()
-                           (add-to-list 'doom-auto-minor-mode-alist `(,(concat org-pinboard-dir ".*\\.org\\'") . pinboard-mode))))
+;; ;;;###autoload
+;; (add-hook 'org-mode-hook (lambda ()
+;;                            (add-to-list 'doom-auto-minor-mode-alist `(,(concat org-pinboard-dir ".*\\.org\\'") . pinboard-mode))))
+
 ;;;###autoload
 (defun +org-pinboard/dwim-at-point ()
   (interactive)
