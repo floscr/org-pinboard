@@ -107,6 +107,15 @@
 ;;                            (add-to-list 'doom-auto-minor-mode-alist `(,(concat org-pinboard-dir ".*\\.org\\'") . pinboard-mode))))
 
 ;;;###autoload
+(defun org-pinboard-convert-link-to-property ()
+  "Convert a section header with a link to the url property."
+  (interactive)
+  (defun map-fn ()
+    (let* ((link (org-entry-get (point) "ITEM")))
+        (org-entry-put (point) "URL" link)))
+  (org-map-entries #'map-fn nil 'tree))
+
+;;;###autoload
 (defun +org-pinboard/dwim-at-point ()
   (interactive)
   (if-let ((url (org-entry-get (point) "URL")))
