@@ -116,12 +116,19 @@
   (org-capture-put :target (list 'file+headline (nth 1 (org-capture-get :target))     (org-capture-get :annotation)))
   (org-capture-set-target-location))
 
+
+;; ("p" "Pin Bookmark" plain
+;;  (file+function org-pinboard-file org-pinboard-capture-find-header)
+;;  (function org-pinboard-create-template))))
 ;;;###autoload
 (defun org-pinboard-capture-find-header ()
   "Goto matching entry with the current file-header."
   (if (search-forward-regexp (concat ":URL:\s*" (org-capture-bookmark-string-url) "$") nil t)
-      (progn (org-up-element)
-             (org-capture-set-target-location))
+      (progn (org-capture-put :target (list 'file+headline (nth 1 (org-capture-get :target)) (org-capture-get :annotation)))
+             (org-capture-put-target-region-and-position)
+             (org-up-element)
+             (org-up-element)
+             (message "NODE EXISTS"))
     (goto-char (point-max))))
 
 ;;;###autoload
