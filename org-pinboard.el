@@ -117,6 +117,7 @@
 
 ;;;###autoload
 (defun +org-pinboard/dwim-at-point ()
+  "Open a link when with enter."
   (interactive)
   (if-let ((url (org-entry-get (point) "URL")))
       (browse-url url)
