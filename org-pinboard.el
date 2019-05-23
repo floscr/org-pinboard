@@ -102,10 +102,6 @@
 (define-minor-mode pinboard-mode
   "Custom mode for pinboard files to add hooks and bindings.")
 
-;; ;;;###autoload
-;; (add-hook 'org-mode-hook (lambda ()
-;;                            (add-to-list 'doom-auto-minor-mode-alist `(,(concat org-pinboard-dir ".*\\.org\\'") . pinboard-mode))))
-
 ;;;###autoload
 (defun org-pinboard-convert-link-to-property ()
   "Convert a section header with a link to the url property."
@@ -114,6 +110,19 @@
     (let* ((link (org-entry-get (point) "ITEM")))
         (org-entry-put (point) "URL" link)))
   (org-map-entries #'map-fn nil 'tree))
+
+(defun org-capture-template-goto-link ()
+  "Set point for capturing at what capture target file+headline with headline     set to %l would do."
+  (org-capture-put :target (list 'file+headline (nth 1 (org-capture-get :target))     (org-capture-get :annotation)))
+  (org-capture-set-target-location))
+
+;;;###autoload
+(defun org-pinboard-capture-find-header ()
+  "Goto matching entry with the current file-header."
+  (if (search-forward-regexp (concat ":URL:\s*" (org-capture-bookmark-string-url) "$") nil t)
+      (progn (org-up-element)
+             (org-capture-set-target-location))
+    (goto-char (point-max))))
 
 ;;;###autoload
 (defun +org-pinboard/dwim-at-point ()
